@@ -90,8 +90,7 @@ export default function RegisterPage() {
   return (
     <div className="page">
 
-      {/* ================= NAVBAR ================= */}
-
+  
       <nav className="navbar">
         <div className="navLinks">
           <a href="/">Home</a>
@@ -106,7 +105,7 @@ export default function RegisterPage() {
         </div>
       </nav>
 
-      {/* ================= REGISTER ================= */}
+    
 
       <main className="registerSection">
         <div className="box">
@@ -171,8 +170,7 @@ export default function RegisterPage() {
         </div>
       </main>
 
-      {/* ================= CSS ================= */}
-
+   
       <style jsx>{`
 
         * {
@@ -182,7 +180,7 @@ export default function RegisterPage() {
           font-family: Arial, sans-serif;
         }
 
-        /* ================= PAGE ================= */
+        
 
         .page {
           width: 100%;
@@ -203,7 +201,7 @@ export default function RegisterPage() {
           background-repeat: no-repeat;
         }
 
-        /* ================= NAVBAR ================= */
+     
 
         .navbar {
           position: fixed;
@@ -233,7 +231,7 @@ export default function RegisterPage() {
           z-index: 100;
         }
 
-        /* ================= NAV LINKS ================= */
+   
 
         .navLinks {
           display: flex;
@@ -258,7 +256,6 @@ export default function RegisterPage() {
           color: #e5e9ff;
         }
 
-        /* ================= GET STARTED ================= */
 
         .getStarted {
           padding: 11px 18px;
@@ -279,7 +276,7 @@ export default function RegisterPage() {
             rgba(102, 126, 234, 0.35);
         }
 
-        /* ================= FORM AREA ================= */
+      
 
         .registerSection {
           position: fixed;
@@ -291,12 +288,12 @@ export default function RegisterPage() {
 
           display: flex;
 
-          /* FORM RIGHT SIDE */
+    
           justify-content: flex-end;
 
           align-items: center;
 
-          /* RIGHT SIDE GAP */
+        
           padding: 100px 7% 20px 20px;
 
           z-index: 10;
@@ -304,7 +301,7 @@ export default function RegisterPage() {
           pointer-events: none;
         }
 
-        /* ================= FORM CARD ================= */
+       
 
         .box {
           width: 380px;
@@ -317,10 +314,10 @@ export default function RegisterPage() {
 
           pointer-events: auto;
 
-          /* ROUNDED ALL 4 CORNERS */
+         
           border-radius: 30px !important;
 
-          /* GLASS EFFECT */
+   
           background:
             rgba(
               255,
@@ -332,7 +329,7 @@ export default function RegisterPage() {
           backdrop-filter: blur(25px);
           -webkit-backdrop-filter: blur(25px);
 
-          /* BORDER ALL 4 SIDES */
+       
           border:
             2px solid
             rgba(
@@ -356,7 +353,7 @@ export default function RegisterPage() {
             );
         }
 
-        /* ================= HEADING ================= */
+       
 
         .box h1 {
           text-align: center;
@@ -384,7 +381,7 @@ export default function RegisterPage() {
           margin-bottom: 22px;
         }
 
-        /* ================= INPUT ================= */
+      
 
         .box input {
           width: 100%;
@@ -459,7 +456,7 @@ export default function RegisterPage() {
             );
         }
 
-        /* ================= GOOGLE ================= */
+       
 
         .google {
           width: 100%;
@@ -484,7 +481,7 @@ export default function RegisterPage() {
           max-width: 100% !important;
         }
 
-        /* ================= REGISTER BUTTON ================= */
+     
 
         .box button {
           width: 100%;
@@ -524,7 +521,7 @@ export default function RegisterPage() {
             );
         }
 
-        /* ================= MOBILE ================= */
+   
 
         @media (max-width: 750px) {
 
@@ -571,7 +568,7 @@ export default function RegisterPage() {
             padding: 9px 12px;
           }
 
-          /* FORM RIGHT SIDE */
+      
 
           .registerSection {
             justify-content: flex-end;
