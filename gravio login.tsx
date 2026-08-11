@@ -1,558 +1,625 @@
 "use client";
 
-import {
-  Home,
-  Package,
-  ClipboardList,
-  Truck,
-  MapPin,
-  Wallet,
-  Bell,
-  HelpCircle,
-  Settings,
-  LogOut,
-  Store,
-  Utensils,
-  Pill,
-  ShoppingBasket,
-  ChevronRight,
-  Clock3,
-  CheckCircle2,
-  ArrowUpRight,
-  CreditCard,
-  Star,
-  UserRound,
-} from "lucide-react";
+import { useState } from "react";
+import Link from "next/link";
+import Swal from "sweetalert2";
 
-import "./dashboard.css";
+export default function LoginPage() {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-export default function Dashboard() {
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!firstName || !lastName || !email || !password) {
+      Swal.fire({
+        icon: "warning",
+        title: "Missing Details",
+        text: "Please fill all the fields.",
+      });
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        Swal.fire({
+          icon: "error",
+          title: "Login Failed",
+          text: data.message || "Invalid login details.",
+        });
+        return;
+      }
+
+      await Swal.fire({
+        icon: "success",
+        title: "Welcome Back!",
+        text: "Login successful.",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+
+      window.location.href = "/dashboard";
+    } catch (error) {
+      console.error(error);
+
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Unable to connect to server.",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="dashboard">
+    <main className="login-page">
+      <div className="overlay"></div>
 
-      {/* ================= SIDEBAR ================= */}
-      <aside className="sidebar">
+      <div className="login-area">
 
-        <div className="brand">
-          <div className="brandIcon">🚚</div>
+      
 
-          <div>
+        <div className="gravio-brand">
+          <div className="gravio-icon">
+            G
+          </div>
+
+          <div className="gravio-text">
             <h1>Gravio</h1>
-            <p>Delivery Network</p>
+            <p>Village Connect Delivery</p>
           </div>
         </div>
 
-        <div className="menuTitle">MAIN MENU</div>
 
-        <nav className="navigation">
+        <div className="login-card">
 
-          <a className="navItem active">
-            <Home size={19} />
-            <span>Dashboard</span>
-          </a>
-
-          <a className="navItem">
-            <Package size={19} />
-            <span>Book Delivery</span>
-          </a>
-
-          <a className="navItem">
-            <ClipboardList size={19} />
-            <span>My Orders</span>
-          </a>
-
-          <a className="navItem">
-            <Truck size={19} />
-            <span>Track Delivery</span>
-          </a>
-
-          <a className="navItem">
-            <MapPin size={19} />
-            <span>Addresses</span>
-          </a>
-
-          <a className="navItem">
-            <Wallet size={19} />
-            <span>Wallet</span>
-          </a>
-
-        </nav>
-
-        <div className="menuTitle secondTitle">ACCOUNT</div>
-
-        <nav className="navigation">
-
-          <a className="navItem">
-            <Bell size={19} />
-            <span>Notifications</span>
-            <small>3</small>
-          </a>
-
-          <a className="navItem">
-            <UserRound size={19} />
-            <span>Profile</span>
-          </a>
-
-          <a className="navItem">
-            <HelpCircle size={19} />
-            <span>Help Center</span>
-          </a>
-
-          <a className="navItem">
-            <Settings size={19} />
-            <span>Settings</span>
-          </a>
-
-        </nav>
-
-        {/* Partner Card */}
-        <div className="partnerBox">
-
-          <div>
-            <span>Earn with Gravio</span>
-            <h3>Become a<br />Delivery Partner</h3>
-
-            <button>
-              Join Now
-              <ArrowUpRight size={14} />
-            </button>
+          <div className="welcome">
+            <h2>Welcome Back!</h2>
+            <p>Sign in to continue to your account</p>
           </div>
 
-          <div className="partnerVehicle">🛵</div>
+          <form onSubmit={handleLogin}>
+
+          
+
+            <div className="name-row">
+
+              <div className="input-group">
+                <label>First Name</label>
+
+                <input
+                  type="text"
+                  placeholder="First name"
+                  value={firstName}
+                  onChange={(e) =>
+                    setFirstName(e.target.value)
+                  }
+                />
+              </div>
+
+              <div className="input-group">
+                <label>Last Name</label>
+
+                <input
+                  type="text"
+                  placeholder="Last name"
+                  value={lastName}
+                  onChange={(e) =>
+                    setLastName(e.target.value)
+                  }
+                />
+              </div>
+
+            </div>
+
+          
+
+            <div className="input-group">
+              <label>Email Address</label>
+
+              <input
+                type="email"
+                placeholder="Enter your email address"
+                value={email}
+                onChange={(e) =>
+                  setEmail(e.target.value)
+                }
+              />
+            </div>
+
+           
+
+            <div className="input-group">
+
+              <div className="password-header">
+                <label>Password</label>
+
+                <Link href="/forgot-password">
+                  Forgot Password?
+                </Link>
+              </div>
+
+              <div className="password-wrapper">
+
+                <input
+                  type={
+                    showPassword
+                      ? "text"
+                      : "password"
+                  }
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) =>
+                    setPassword(e.target.value)
+                  }
+                />
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    setShowPassword(!showPassword)
+                  }
+                >
+                  {showPassword
+                    ? "Hide"
+                    : "Show"}
+                </button>
+
+              </div>
+            </div>
+
+        
+
+            <button
+              type="submit"
+              className="login-button"
+              disabled={loading}
+            >
+              {loading
+                ? "Logging in..."
+                : "Login"}
+            </button>
+
+          </form>
+
+    
+
+          <div className="register">
+            Don't have an account?
+
+            <Link href="/register">
+              Register Now
+            </Link>
+          </div>
+
+          <div className="security">
+            🔒 Your information is secure
+          </div>
 
         </div>
+      </div>
 
-        <button className="logout">
-          <LogOut size={18} />
-          Logout
-        </button>
+      <style jsx>{`
 
-      </aside>
+        * {
+          box-sizing: border-box;
+        }
 
 
-      {/* ================= MAIN ================= */}
-      <main className="mainContent">
 
-        {/* HEADER */}
-        <header className="topbar">
+        .login-page {
+          min-height: 100vh;
 
-          <div>
-            <p className="pageLabel">DASHBOARD</p>
-            <h2>Overview</h2>
-          </div>
+          display: flex;
+          align-items: center;
+          justify-content: center;
 
-          <div className="topActions">
+          position: relative;
 
-            <button className="notification">
-              <Bell size={20} />
-              <i>3</i>
-            </button>
+          padding: 25px 15px;
 
-            <div className="userProfile">
-              <div className="userAvatar">👩</div>
+          background-image: url("/hero.jpg");
 
-              <div>
-                <strong>Khushboo</strong>
-                <span>Customer</span>
-              </div>
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+        }
 
-              <span className="downArrow">⌄</span>
-            </div>
+        .overlay {
+          position: absolute;
+          inset: 0;
 
-          </div>
+          background: rgba(0, 0, 0, 0.38);
+        }
 
-        </header>
+       
 
+        .login-area {
+          position: relative;
 
-        {/* ================= HERO ================= */}
-        <section className="welcomeHero">
+          z-index: 2;
 
-          <div className="heroContent">
+          width: 100%;
+          max-width: 440px;
 
-            <span className="hello">Good Morning 👋</span>
+          display: flex;
 
-            <h1>
-              Welcome back,
-              <br />
-              <strong>Khushboo!</strong>
-            </h1>
+          flex-direction: column;
 
-            <p>
-              Everything you need to manage your deliveries
-              in one place.
-            </p>
+          align-items: center;
+        }
 
-            <button className="primaryButton">
-              <Package size={18} />
-              Book a Delivery
-              <ChevronRight size={17} />
-            </button>
 
-          </div>
 
-          <div className="heroTruck">
-            🚚
-          </div>
+        .gravio-brand {
+          display: flex;
 
-        </section>
+          align-items: center;
 
+          gap: 11px;
 
-        {/* ================= STATS ================= */}
-        <section className="statsGrid">
+          margin-bottom: 16px;
 
-          <div className="statBox">
+          color: white;
 
-            <div className="statTop">
-              <span>Active Orders</span>
+          filter:
+            drop-shadow(
+              0 5px 12px
+              rgba(0, 0, 0, 0.35)
+            );
+        }
 
-              <div className="statIcon blue">
-                <Package size={20} />
-              </div>
-            </div>
+        .gravio-icon {
+          width: 45px;
+          height: 45px;
 
-            <h3>02</h3>
+          display: flex;
 
-            <p className="positive">
-              <ArrowUpRight size={14} />
-              1 new today
-            </p>
+          align-items: center;
+          justify-content: center;
 
-          </div>
+          border-radius: 13px;
 
+          background: white;
 
-          <div className="statBox">
+          color: #167653;
 
-            <div className="statTop">
-              <span>Completed</span>
+          font-size: 23px;
 
-              <div className="statIcon green">
-                <CheckCircle2 size={20} />
-              </div>
-            </div>
+          font-weight: 900;
 
-            <h3>18</h3>
+          box-shadow:
+            0 7px 20px
+            rgba(0, 0, 0, 0.25);
+        }
 
-            <p className="muted">
-              Deliveries completed
-            </p>
+        .gravio-text h1 {
+          margin: 0;
 
-          </div>
+          font-size: 29px;
 
+          line-height: 1;
 
-          <div className="statBox">
+          font-weight: 850;
 
-            <div className="statTop">
-              <span>Wallet Balance</span>
+          letter-spacing: -0.5px;
+        }
 
-              <div className="statIcon purple">
-                <Wallet size={20} />
-              </div>
-            </div>
+        .gravio-text p {
+          margin: 3px 0 0;
 
-            <h3>₹850</h3>
+          font-size: 9px;
 
-            <p className="muted">
-              Available balance
-            </p>
+          letter-spacing: 1px;
 
-          </div>
+          text-transform: uppercase;
 
+          color:
+            rgba(255, 255, 255, 0.82);
+        }
 
-          <div className="statBox">
 
-            <div className="statTop">
-              <span>Rating</span>
+        .login-card {
+          width: 100%;
 
-              <div className="statIcon yellow">
-                <Star size={20} />
-              </div>
-            </div>
+          padding: 30px 34px;
 
-            <h3>4.8</h3>
+          background: #ffffff;
 
-            <p className="positive">
-              ★ Excellent rating
-            </p>
+          border: 3px solid #ffffff;
 
-          </div>
+          border-radius: 20px;
 
-        </section>
+          box-shadow:
+            0 25px 60px
+            rgba(0, 0, 0, 0.35);
+        }
 
+       
 
-        {/* ================= CONTENT GRID ================= */}
-        <section className="contentGrid">
+        .welcome {
+          text-align: center;
 
-          {/* QUICK SERVICES */}
-          <div className="servicesPanel">
+          margin-bottom: 21px;
+        }
 
-            <div className="sectionHeading">
-              <div>
-                <span>EXPLORE</span>
-                <h2>Quick Services</h2>
-              </div>
+        .welcome h2 {
+          margin: 0;
 
-              <button>
-                View all
-                <ChevronRight size={16} />
-              </button>
-            </div>
+          color: #1d332b;
 
+          font-size: 23px;
 
-            <div className="serviceGrid">
+          font-weight: 800;
+        }
 
-              <div className="serviceCard food">
-                <div className="serviceIcon">
-                  <Utensils size={23} />
-                </div>
+        .welcome p {
+          margin: 5px 0 0;
 
-                <div>
-                  <h3>Food</h3>
-                  <p>Order from local restaurants</p>
-                </div>
+          color: #888;
 
-                <ChevronRight size={17} />
-              </div>
+          font-size: 12px;
+        }
 
 
-              <div className="serviceCard grocery">
-                <div className="serviceIcon">
-                  <ShoppingBasket size={23} />
-                </div>
+        .input-group {
+          margin-bottom: 14px;
+        }
 
-                <div>
-                  <h3>Grocery</h3>
-                  <p>Daily essentials at your door</p>
-                </div>
+        .input-group label {
+          display: block;
 
-                <ChevronRight size={17} />
-              </div>
+          margin-bottom: 5px;
 
+          color: #29342f;
 
-              <div className="serviceCard medicine">
-                <div className="serviceIcon">
-                  <Pill size={23} />
-                </div>
+          font-size: 12px;
 
-                <div>
-                  <h3>Medicine</h3>
-                  <p>Get essentials delivered</p>
-                </div>
+          font-weight: 700;
+        }
 
-                <ChevronRight size={17} />
-              </div>
+        .input-group input {
+          width: 100%;
 
+          height: 43px;
 
-              <div className="serviceCard shops">
-                <div className="serviceIcon">
-                  <Store size={23} />
-                </div>
+          padding: 0 12px;
 
-                <div>
-                  <h3>Village Shops</h3>
-                  <p>Shop from nearby stores</p>
-                </div>
+          border:
+            1.5px solid #dce3df;
 
-                <ChevronRight size={17} />
-              </div>
+          border-radius: 9px;
 
-            </div>
+          background: #ffffff;
 
-          </div>
+          color: #222;
 
+          outline: none;
 
-          {/* RECENT ORDER */}
-          <div className="orderPanel">
+          font-size: 13px;
 
-            <div className="sectionHeading">
+          transition: 0.2s;
+        }
 
-              <div>
-                <span>RECENT</span>
-                <h2>Latest Order</h2>
-              </div>
+        .input-group input::placeholder {
+          color: #aaa;
+        }
 
-              <button>
-                All orders
-                <ChevronRight size={16} />
-              </button>
+        .input-group input:focus {
+          border-color: #167653;
 
-            </div>
+          box-shadow:
+            0 0 0 3px
+            rgba(22, 118, 83, 0.08);
+        }
 
+    
 
-            <div className="orderCard">
+        .name-row {
+          display: grid;
 
-              <div className="orderHeader">
+          grid-template-columns:
+            1fr 1fr;
 
-                <div className="orderNumber">
-                  <div className="packageIcon">
-                    <Package size={22} />
-                  </div>
+          gap: 11px;
+        }
 
-                  <div>
-                    <strong>#GRV-28491</strong>
-                    <span>Today, 04:25 PM</span>
-                  </div>
-                </div>
+      
 
-                <span className="status">
-                  In Transit
-                </span>
+        .password-header {
+          display: flex;
 
-              </div>
+          align-items: center;
 
+          justify-content: space-between;
 
-              <div className="route">
+          margin-bottom: 5px;
+        }
 
-                <div className="routePoint">
-                  <div className="dot pickup"></div>
+        .password-header label {
+          margin: 0;
+        }
 
-                  <div>
-                    <span>Pickup</span>
-                    <strong>Village Market</strong>
-                  </div>
-                </div>
+        .password-header a {
+          color: #167653;
 
+          font-size: 11px;
 
-                <div className="routeLine"></div>
+          font-weight: 700;
 
+          text-decoration: none;
+        }
 
-                <div className="routePoint">
-                  <div className="dot destination"></div>
+        .password-wrapper {
+          position: relative;
+        }
 
-                  <div>
-                    <span>Delivery</span>
-                    <strong>Jind, Haryana</strong>
-                  </div>
-                </div>
+        .password-wrapper input {
+          padding-right: 60px;
+        }
 
-              </div>
+        .password-wrapper button {
+          position: absolute;
 
+          right: 10px;
 
-              <div className="deliveryProgress">
+          top: 50%;
 
-                <div className="progressTop">
-                  <span>Delivery Progress</span>
-                  <strong>65%</strong>
-                </div>
+          transform:
+            translateY(-50%);
 
-                <div className="progressBar">
-                  <div></div>
-                </div>
+          border: none;
 
-              </div>
+          background: transparent;
 
+          color: #167653;
 
-              <button className="trackButton">
-                Track Order
-                <ChevronRight size={16} />
-              </button>
+          font-size: 11px;
 
-            </div>
+          font-weight: 700;
 
-          </div>
+          cursor: pointer;
+        }
 
-        </section>
+    
 
+        .login-button {
+          width: 100%;
 
-        {/* ================= BOTTOM ================= */}
-        <section className="bottomGrid">
+          height: 44px;
 
-          {/* WALLET */}
-          <div className="walletPanel">
+          margin-top: 3px;
 
-            <div className="walletHeader">
+          border: none;
 
-              <div>
-                <span>YOUR WALLET</span>
-                <h2>₹850.00</h2>
-              </div>
+          border-radius: 9px;
 
-              <div className="walletIcon">
-                <CreditCard size={24} />
-              </div>
+          background: #167653;
 
-            </div>
+          color: white;
 
-            <div className="walletFooter">
-              <span>Available balance</span>
+          font-size: 14px;
 
-              <button>
-                Add Money
-                <ArrowUpRight size={15} />
-              </button>
-            </div>
+          font-weight: 800;
 
-          </div>
+          cursor: pointer;
 
+          transition: 0.2s;
 
-          {/* ACTIVITY */}
-          <div className="activityPanel">
+          box-shadow:
+            0 7px 18px
+            rgba(22, 118, 83, 0.20);
+        }
 
-            <div className="sectionHeading">
-              <div>
-                <span>ACTIVITY</span>
-                <h2>Recent Activity</h2>
-              </div>
-            </div>
+        .login-button:hover {
+          background: #105d42;
 
+          transform:
+            translateY(-1px);
+        }
 
-            <div className="activityItem">
+        .login-button:disabled {
+          opacity: 0.65;
 
-              <div className="activityIcon green">
-                <CheckCircle2 size={18} />
-              </div>
+          cursor: not-allowed;
 
-              <div>
-                <strong>Delivery completed</strong>
-                <span>Yesterday · ₹120</span>
-              </div>
+          transform: none;
+        }
 
-              <b>+₹120</b>
 
-            </div>
+        .register {
+          margin-top: 17px;
 
+          text-align: center;
 
-            <div className="activityItem">
+          color: #777;
 
-              <div className="activityIcon purple">
-                <Wallet size={18} />
-              </div>
+          font-size: 12px;
+        }
 
-              <div>
-                <strong>Wallet recharge</strong>
-                <span>2 days ago</span>
-              </div>
+        .register a {
+          margin-left: 5px;
 
-              <b>+₹500</b>
+          color: #167653;
 
-            </div>
+          font-weight: 750;
 
-          </div>
+          text-decoration: none;
+        }
 
+    
 
-          {/* SUPPORT */}
-          <div className="supportPanel">
+        .security {
+          margin-top: 12px;
 
-            <div className="supportIcon">
-              <HelpCircle size={25} />
-            </div>
+          text-align: center;
 
-            <div>
-              <span>NEED HELP?</span>
-              <h2>We're here for you</h2>
-              <p>Have any questions about your delivery?</p>
+          color: #aaa;
 
-              <button>
-                Visit Help Center
-                <ChevronRight size={15} />
-              </button>
-            </div>
+          font-size: 10px;
+        }
 
-          </div>
+    
 
-        </section>
+        @media (max-width: 550px) {
 
-      </main>
+          .login-page {
+            padding: 20px 12px;
+          }
 
-    </div>
+          .login-area {
+            max-width: 400px;
+          }
+
+          .login-card {
+            padding: 27px 20px;
+
+            border-width: 2px;
+
+            border-radius: 18px;
+          }
+
+          .name-row {
+            grid-template-columns: 1fr;
+
+            gap: 0;
+          }
+
+          .gravio-icon {
+            width: 42px;
+            height: 42px;
+
+            font-size: 21px;
+          }
+
+          .gravio-text h1 {
+            font-size: 27px;
+          }
+        }
+
+      `}</style>
+    </main>
   );
 }
